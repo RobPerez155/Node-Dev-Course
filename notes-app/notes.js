@@ -1,19 +1,14 @@
 const fs = require("fs");
 const chalk = require("chalk");
+const { title } = require("process");
 //notes.js is like a toolbox and its functions are like tools
-const getNotes = function () {
-  return "Your notes...";
-};
 
 //addNote is like a drill, title and body are like the bit and the screw
-const addNote = function (title, body) {
+const addNote = (title, body) => {
   const notes = loadNotes();
-  const duplicateNotes = notes.filter(function (note) {
-    //.filter() returns a readonly array
-    return note.title === title;
-  });
+  const duplicateNote = notes.find((note) => note.title === title); //.find searches for the first item it is searching for and then stops
 
-  if (duplicateNotes.length === 0) {
+  if (!duplicateNote) {
     notes.push({
       title: title,
       body: body,
@@ -25,11 +20,10 @@ const addNote = function (title, body) {
   }
 };
 
-const removeNote = function (title) {
+const removeNote = (title) => {
   const notes = loadNotes();
-  const notesToKeep = notes.filter(function (note) {
-    return note.title !== title; //This gives a boolean value, True will add it to the new array and False will skip it
-  });
+  const notesToKeep = notes.filter((note) => note.title !== title) // "=>" denotes a return statement and This gives a boolean value, True will add it to the new array and False will skip it
+
 
   if (notes.length > notesToKeep.length) {
       console.log(chalk.green.inverse("Note removed"));
@@ -44,7 +38,7 @@ const saveNotes = (notes) => {
   fs.writeFileSync("notes.json", dataJSON);
 };
 
-const loadNotes = function () {
+const loadNotes = () => {
   try {
     const dataBuffer = fs.readFileSync("notes.json");
     const dataJSON = dataBuffer.toString();
@@ -54,9 +48,27 @@ const loadNotes = function () {
   }
 };
 
+const listNotes = () => {
+  const notes = loadNotes()
+  console.log(chalk.yellow("Your notes"))
+  notes.forEach((note) => console.log(chalk.green(note.title)))
+}
+
+const readNote = (title) => {
+  const notes = loadNotes()
+  const noteToRead = notes.find((note) => note.title === title)
+
+  if (noteToRead === undefined) {
+    console.log(chalk.inverse.red("Look again buckaroo"))
+  } else {
+    console.log(chalk.inverse.green(noteToRead.title) + " " + (noteToRead.body))
+  }
+}
+
 //Exports is like a list of tools people can take and access.
 module.exports = {
-  getNotes: getNotes,
   addNote: addNote,
   removeNote: removeNote,
+  listNotes: listNotes,
+  readNote: readNote
 };
