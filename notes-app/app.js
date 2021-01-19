@@ -1,4 +1,5 @@
 //app.js is like the user of the tools and require tells us what toolboxes they need
+const { demandOption, string } = require('yargs')
 const yargs = require('yargs') // This is an npm package
 const notes = require('./notes.js') // This is our file
 
@@ -21,7 +22,7 @@ yargs.command({  //Initializes a new command
       type: 'string'
     }
   }, //This is an object that will describe all the options a given command will support
-  handler: function (argv) {
+  handler(argv) {
     notes.addNote(argv.title, argv.body)
   }
 })
@@ -37,7 +38,7 @@ yargs.command({
       type: 'string'
     }
   },
-  handler: function(argv) {
+  handler(argv) {
     notes.removeNote(argv.title)
   }
 })
@@ -46,8 +47,8 @@ yargs.command({
 yargs.command({
   command: 'list',
   describe:'list notes',
-  handler: function() {
-    console.log('Listing the notes')
+  handler(argv) {
+    notes.listNotes(argv.title)
   }
 })
 
@@ -55,8 +56,15 @@ yargs.command({
 yargs.command({
   command: 'read',
   describe: 'read notes',
-  handler: function() {
-    console.log('Reading notes')
+  builder: {
+    title: {
+      describe: 'Title of note to be read',
+      demandOption: true,
+      type: string
+    }
+  },
+  handler(argv) {
+    notes.readNote(argv.title)
   }
 })
 
