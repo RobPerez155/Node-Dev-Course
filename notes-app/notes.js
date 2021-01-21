@@ -7,7 +7,7 @@ const { title } = require("process");
 const addNote = (title, body) => {
   const notes = loadNotes();
   const duplicateNote = notes.find((note) => note.title === title); //.find searches for the first item it is searching for and then stops
-
+  debugger
   if (!duplicateNote) {
     notes.push({
       title: title,
