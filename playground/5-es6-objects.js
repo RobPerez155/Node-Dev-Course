@@ -21,12 +21,12 @@ const product = {
   salePrice: undefined  
 }
 
-//const label = product.label
-//const stock = product.stock
+const label = product.label
+const stock = product.stock
 
-// const {label:productLabel, stock, rating = 5} = product
-// console.log(productLabel) //We can change the name of the property label
-// console.log(stock)
+const {label:productLabel, stock, rating = 5} = product
+console.log(productLabel) //We can change the name of the property label
+console.log(stock)
 // console.log(rating)//We can add a new property but it will come back as undefined, unless we give it a default value as we did above. A default will only be used if there isn't already a default assigned to the value
 
 const transaction = (type, { label, stock }) => { //Here we can destructure a property from inside the curly braces before we call product.
