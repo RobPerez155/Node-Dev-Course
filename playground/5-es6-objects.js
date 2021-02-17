@@ -21,16 +21,35 @@ const product = {
   salePrice: undefined  
 }
 
-const label = product.label
-const stock = product.stock
+// const label = product.label
+// const stock = product.stock
 
-const {label:productLabel, stock, rating = 5} = product
+//-- Part 1 -- Destructuring
+
+// Breakdown of Object Destructuring
+const {propertyToBeExtracted1, propertyToBeExtracted2:property2Renamed, newProperty = newDefault} = objectToBeDeconstructed;
+// We have now created new variables that can be referenced/used from now on as seen below
+console.log(propertyToBeExtracted1) -> propertyToBeExtracted1
+console.log(property2Renamed) -> propertyToBeExtracted2
+console.log(newDefault) -> newDefault // Note: The default we assign will not overwrite an existing value
+
+
+
+const {label:productLabel, stock, rating = 5} = product; 
 console.log(productLabel) //We can change the name of the property label
 console.log(stock)
 // console.log(rating)//We can add a new property but it will come back as undefined, unless we give it a default value as we did above. A default will only be used if there isn't already a default assigned to the value
 
+//-- Part 2 -- Property Shorthand
+
+const functionName = (argument1, {childProperty1, childProperty2}) => { // {property1, property2} counts as one argument
+  console.log(argument1, childProperty1, childProperty2)
+}
+functionName(newArgument, parentProperty)//this will return #46
+
 const transaction = (type, { label, stock }) => { //Here we can destructure a property from inside the curly braces before we call product.
   console.log(type, label, stock)//We can call everything all at once
 }
+
 
 transaction('order', product)

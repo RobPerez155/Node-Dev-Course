@@ -9,21 +9,27 @@ const forecast = (longitude, latitude, callback) => {
     latitude +
     "&units=f";
 
-  //This is the 'callback' from #3
-  request({ url: url, json: true }, (error, response) => {
+    //This is the 'callback' from #3
+    request({ url, json: true }, (error, { body }) => { //{ body } is shorthand for response.body
+
+    const {temperature, weather_descriptions:weather, precip:precipitation} = body.current
+    
     if (error) {
       callback("Unable to connect to weather services", undefined); // Low level error
-    } else if (response.body.error) {
+    } else if (body.error) {
       callback("Unable to find location", undefined); //High level error
     } else {
       callback(
         undefined,
         "It is currently " +
-          response.body.current.temperature +
+          temperature +
+          // response.body.current.temperature +
           " degrees out and " +
-          response.body.current.weather_descriptions +
+          weather +
+          // response.body.current.weather_descriptions +
           ". There is a " +
-          response.body.current.precip +
+          precipitation +
+          // response.body.current.precip +
           "% chance of rain."
       );
     }
