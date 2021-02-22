@@ -1,6 +1,11 @@
 const path = require("path");
 const express = require("express");
 const hbs = require("hbs");
+const { report } = require("process");
+const geocode = require("./utils/geocode");
+const forecast = require("./utils/forecast");
+
+const address = process.argv[2];
 
 const app = express();
 
@@ -45,9 +50,34 @@ app.get("/about", (req, res) => {
 
 // app.com/weather
 app.get("/weather", (req, res) => {
+  if (!req.query.address) {
+    return res.send({
+      error: "You must provide an address",
+    });
+  }
+
+  // geocode function runs geocode.js from Utils folder
+  geocode(req.query.address, (error, { latitude, longitude, location } = {}) => {
+    if (error) {
+      return res.send({error}); // Here we used the shorthand for error: error
+    }
+    forecast(latitude, longitude, (error, forecastData) => {
+      if (error) {
+        return res.send({error});
+      }
+      res.send({ forecast: forecastData, location, address: req.query.address });
+    });
+  });
+});
+
+app.get("/products", (req, res) => {
+  if (!req.query.search) {
+    return res.send({
+      error: "You must provide a search term.",
+    });
+  }
   res.send({
-    forecast: "It's gonna rain!",
-    location: "Tempe, AZ",
+    products: [],
   });
 });
 

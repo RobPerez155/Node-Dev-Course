@@ -47,7 +47,8 @@ const functionName = (argument1, {childProperty1, childProperty2}) => { // {prop
 }
 functionName(newArgument, parentProperty)//this will return #46
 
-const transaction = (type, { label, stock }) => { //Here we can destructure a property from inside the curly braces before we call product.
+const transaction = (type, { label, stock } = {}) => { //Here we can destructure a property from inside the curly braces before we call product.
+  // On #50, = {}), is setting up a default value for our object
   console.log(type, label, stock)//We can call everything all at once
 }
 
