@@ -11,7 +11,7 @@ weatherForm.addEventListener("submit", (e) => {
 
   const location = search.value; //value will get us the input value
 
-  fetch(`http://localhost:3000/weather?address=${location}`).then(
+  fetch(`/weather?address=${location}`).then(
     (response) => {
       response.json().then((data) => {
         //here we are converting response to a JSON file

@@ -1,13 +1,11 @@
 const path = require("path");
 const express = require("express");
 const hbs = require("hbs");
-const { report } = require("process");
 const geocode = require("./utils/geocode");
 const forecast = require("./utils/forecast");
 
-const address = process.argv[2];
-
 const app = express();
+const port = process.env.PORT || 3000
 
 // Define paths for Express config
 const publicDirectoryPath = path.join(__dirname, "../public");
@@ -98,6 +96,6 @@ app.get("*", (req, res) => {
   });
 });
 
-app.listen(3000, () => {
-  console.log("This code was ran asynchronously when the server was started");
+app.listen(port, () => {
+  console.log(`Server is up on ${port}`);
 }); //This is what we need to start up the server, 3000 is the port number we'll use
