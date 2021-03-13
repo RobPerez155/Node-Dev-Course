@@ -1,4 +1,4 @@
-//CRUD  create read update delete
+//CRUD  create read update delete Refer to the PDF Guide page 61 and on for a review in CRUD - To start up Mongo database in a new terminal navigate to 'cd ~' and then use '➜  ~ /Users/robp/mongodb/bin/mongod --dbpath=/Users/robp/mongodb-data'.
 
 // const mongodb = require("mongodb");
 // const MongoClient = mongodb.MongoClient;
@@ -19,35 +19,32 @@ MongoClient.connect(
 
     const db = client.db(databaseName);
 
-    db.collection("users").findOne({ name: "Kat" }, (error, user) => {
-      //findOne takes 2 arguments, first the object we're looking for and second the function we want to do with it
-      if (error) {
-        return console.log("Unable to fetch");
-      }
+    //--- Updating with Promises instead of callbacks ---
+    //This is a VERY common Promise pattern in Node
+    // db.collection('users').updateOne({
+    //   _id: new ObjectID("603815eeca200a739052d8dd")
+    // }, {
+    //   $inc: {
+    //     age: 5
+    //   }
+    // }).then((result) => {
+    //   console.log(result)
+    // }).catch((error) => {
+    //   console.log(error)
+    // })
 
-      console.log(user.name);
-    });
-
-    db.collection("users")
-      .find({ age: 32 })
-      .toArray((error, users) => {
-        console.log(users);
+    db.collection("tasks")
+      .updateMany(
+        {
+          completed: false,
+        },
+        {
+          $set: { completed: true },
+        }
+      ).then((result) => {
+        console.log(result);
+      }).catch((error) => {
+        console.log(error);
       });
-
-    db.collection("users")
-      .find({ age: 32 })
-      .count((error, count) => console.log(count));
-
-    db.collection("tasks").findOne(
-      { _id: new ObjectID("60381b756cd76874ecb445c4") },
-      (error, task) => {
-        console.log(task);
-      });
-
-    db.collection('tasks').find({ completed: false}).toArray((error, tasks) => {
-      console.log(tasks)
-    })
   }
 );
-
-
