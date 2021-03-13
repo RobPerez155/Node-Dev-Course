@@ -33,18 +33,26 @@ MongoClient.connect(
     //   console.log(error)
     // })
 
-    db.collection("tasks")
-      .updateMany(
-        {
-          completed: false,
-        },
-        {
-          $set: { completed: true },
-        }
-      ).then((result) => {
-        console.log(result);
+    // db.collection("tasks")
+    //   .updateMany(
+    //     {
+    //       completed: false,
+    //     },
+    //     {
+    //       $set: { completed: true },
+    //     }
+    //   ).then((result) => {
+    //     console.log(result);
+    //   }).catch((error) => {
+    //     console.log(error);
+    //   });
+
+    db.collection("tasks").deleteOne({
+        description: "Sweep floors"
+      }).then((result) => {
+        console.log(result)
       }).catch((error) => {
-        console.log(error);
-      });
+        console.log(error)
+      })
   }
 );
