@@ -1,4 +1,4 @@
-// This is going to be the starting point for our app and where we will initiate our express serve.
+// To start server use "npm run dev" in the terminal. This is going to be the starting point for our app and where we will initiate our express server.
 const express = require('express')
 require('./db/mongoose') // This tells our app to run this file
 const userRouter = require('./routers/user')
@@ -14,4 +14,3 @@ app.use(taskRouter)
 app.listen(port, () => {
   console.log(`Server is up on port ${port}`)
 })
-

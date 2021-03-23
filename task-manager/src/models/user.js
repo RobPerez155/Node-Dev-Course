@@ -1,8 +1,8 @@
 const mongoose = require('mongoose')
 const validator = require('validator')
+const bcrypt = require('bcryptjs')
 
-// mongoose.model('string name for the model',{definition - where we define all of the fields we want} )
-const User = mongoose.model('User', {
+const userSchema = new mongoose.Schema({ // Here is where create the properties for our User model. Doing it this way will allow us to use Middleware like bcrypt
   name: {
     type: String,
     required: true,
@@ -42,5 +42,18 @@ const User = mongoose.model('User', {
     }
   }
 })
+
+userSchema.pre('save', async function(next) {
+  const user = this // this is equal to the document being save, in this case userSchema
+
+  if (user.isModified('password')) { //Here we are checking if the password has been modified. This will be true if the user is first created or if password is the item being changed. 
+  // This prevents us from double-hashing a password.
+    user.password = await bcrypt.hash(user.password, 8)
+  }
+
+  next() // this tells our function when it's complete
+})
+
+const User = mongoose.model('User', userSchema) // mongoose.model('string name for the model', schemaName (- where all of our properties are kept) )
 
 module.exports = User
