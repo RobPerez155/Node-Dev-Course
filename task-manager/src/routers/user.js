@@ -13,6 +13,15 @@ router.post('/users', async (req, res) => { // /users is the endpoint
   }
 })
 
+router.post('/users/login', async (req, res) => {
+  try {
+    const user = await User.findByCredentials(req.body.email, req.body.password) // We will create/define findByCredentials in the User model file
+    res.send(user)
+  } catch (e) {
+    res.status(400).send()
+  }
+})
+
 router.get('/users', async (req, res) => {
   try {
     const users = await User.find({})

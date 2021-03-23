@@ -11,6 +11,7 @@ const userSchema = new mongoose.Schema({ // Here is where create the properties 
   },
   email: {
     type: String,
+    unique: true,
     required: true,
     trim: true,
     lowercase: true,
@@ -43,6 +44,23 @@ const userSchema = new mongoose.Schema({ // Here is where create the properties 
   }
 })
 
+userSchema.statics.findByCredentials = async (email, password) => { // This option will be called in the user router
+  const user = await User.findOne({ email }) // here we are using the shorthand to find an a user with an email property that matches the email given to us - ({email: email})
+
+  if (!user) {
+    throw new Error('Unable to login')
+  }
+
+  const isMatch = await bcrypt.compare(password, user.password)
+
+  if (!isMatch) {
+    throw new Error('Unable to login')
+  }
+
+  return user
+}
+
+// Hash the plain text password before saving
 userSchema.pre('save', async function(next) {
   const user = this // this is equal to the document being save, in this case userSchema
 
