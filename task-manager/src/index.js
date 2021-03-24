@@ -7,20 +7,13 @@ const taskRouter = require('./routers/task')
 const app = express()
 const port = process.env.PORT || 3000 //part one is what we need to have in order to run our app on heroku and part two is how we have it run on our machine
 
-app.use((req, res, next) => { // next is specific to registering middleware
-  console.log(req.method, req.path)
-  next()
-})
+// app.use((req, res, next) => { // next() is specific to registering middleware
+//     res.status(503).send('This site is currently under maintenance.')
+// })
 
 app.use(express.json()) // Automatically parses incoming JSON to an object where we can access it using our req handlers
 app.use(userRouter)
 app.use(taskRouter)
-
-//
-// Without middleware: new request -> run route handler
-//
-// With middleware: new request -> do something -> run route handler
-//
 
 app.listen(port, () => {
   console.log(`Server is up on port ${port}`)
