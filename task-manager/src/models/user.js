@@ -1,6 +1,7 @@
 const mongoose = require('mongoose')
 const validator = require('validator')
 const bcrypt = require('bcryptjs')
+const jwt = require ('jsonwebtoken')
 
 const userSchema = new mongoose.Schema({ // Here is where create the properties for our User model. Doing it this way will allow us to use Middleware like bcrypt
   name: {
@@ -41,9 +42,27 @@ const userSchema = new mongoose.Schema({ // Here is where create the properties 
         throw new Error('Password cannot contain "password"')
       }
     }
-  }
+  },
+  tokens: [{
+    token: {
+      type: String,
+      required: true
+    }
+  }]
 })
 
+// '.methods' methods are available on the instances aka Instance Methods
+userSchema.methods.generateAuthToken = async function () {
+  const user = this
+  const token = jwt.sign({ _id: user._id.toString()}, 'thisIsASecret') // jwt.sign({string}, string)
+
+  user.tokens = user.tokens.concat({ token })
+  await user.save()
+
+  return token
+}
+
+// '.statics' methods are available on the model aka Model Methods
 userSchema.statics.findByCredentials = async (email, password) => { // This option will be called in the user router
   const user = await User.findOne({ email }) // here we are using the shorthand to find an a user with an email property that matches the email given to us - ({email: email})
 

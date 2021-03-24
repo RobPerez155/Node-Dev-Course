@@ -11,6 +11,18 @@ app.use(express.json()) // This will automatically parse incoming JSON to an obj
 app.use(userRouter)
 app.use(taskRouter)
 
+const jwt = require('jsonwebtoken')
+
+const myFunction = async () => {
+  const token = jwt.sign({ _id: 'abc123'}, 'thisIsASecret', {expiresIn: '1 day'})
+  console.log(token)
+
+  const data = jwt.verify(token, 'thisIsASecret')
+  console.log(data)
+}
+
+myFunction()
+
 app.listen(port, () => {
   console.log(`Server is up on port ${port}`)
 })

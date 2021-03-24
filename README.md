@@ -1,5 +1,9 @@
 # Node-Dev-Course
 This repository contains my progress through a Node developer's course. 
 
-## Technologies Used
+## Libraries Used
 B-Crypt
+npm i bcrypt
+
+jsonwebtokens
+npm i jsonwebtokens
