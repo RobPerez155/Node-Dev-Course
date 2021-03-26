@@ -51,6 +51,16 @@ const userSchema = new mongoose.Schema({ // Here is where create the properties 
   }]
 })
 
+userSchema.methods.toJSON = function () { // toJSON is sending an object back sans the properties that we deleted off of it - this happens every time when we use res.send() JSON.stringify gets called on the user - where we manipulate the the properties we want to expose ANYTIME the User gets sent back to the client.
+  const user = this
+  const userObject = user.toObject()
+
+  delete userObject.password
+  delete userObject.tokens
+
+  return userObject
+}
+
 // '.methods' methods are available on the instances aka Instance Methods
 userSchema.methods.generateAuthToken = async function () {
   const user = this
