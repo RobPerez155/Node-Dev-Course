@@ -26,6 +26,31 @@ router.post('/users/login', async (req, res) => { // Public Route - Here the use
   }
 })
 
+router.post('/users/logout', auth, async (req, res) => {
+  try {
+    req.user.tokens = req.user.tokens.filter((token) => { // Note (token) here is an object
+      return token.token !== req.token // This will return true when the token that were currently looking at isn't the one that was used for authentication. If they're not equal it will return true keeping it in the token array and if false then we'll get rid of it.
+      // The we want logout to work this way is because a user can be logged in multiple devices and we only want to log them out of the current device and not all of them.
+    })
+    await req.user.save()
+
+    res.status(200).send()
+  } catch (e) {
+    res.status(500).send()
+  }
+})
+
+router.post('/users/logoutAll', auth, async (req, res) => {
+  try {
+    req.user.tokens = []
+    await req.user.save()
+
+    res.status(200).send()
+  } catch (e) {
+    res.status(500).send()
+  }
+})
+
 router.get('/users/me', auth, async (req, res) => {
   res.send(req.user) // Allows a user to get their profile when they're authenticated
 })

@@ -11,6 +11,7 @@ const auth = async (req, res, next) => {
       throw new Error()
     }
 
+    req.token = token // This will give our routers access to this specific token
     req.user = user // we are going to give the route(user.js and task.js) handler access to the user that we fetched from the database
     next()
   } catch (e) {
