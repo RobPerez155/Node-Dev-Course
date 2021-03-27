@@ -2,6 +2,7 @@ const mongoose = require('mongoose')
 const validator = require('validator')
 const bcrypt = require('bcryptjs')
 const jwt = require ('jsonwebtoken')
+const Task = require('./task')
 
 const userSchema = new mongoose.Schema({ // Here is where create the properties for our User model. Doing it this way will allow us to use Middleware like bcrypt
   name: {
@@ -106,6 +107,13 @@ userSchema.pre('save', async function(next) {
   }
 
   next() // this tells our function when it's complete
+})
+
+// Delete user tasks when user is removed
+userSchema.pre('remove', async function (next) {
+  const user = this
+  await Task.deleteMany({ owner: user._id }) // This will delete every task where the owner value equals the user's id
+  next()
 })
 
 const User = mongoose.model('User', userSchema) // mongoose.model('string name for the model', schemaName (- where all of our properties are kept) )
