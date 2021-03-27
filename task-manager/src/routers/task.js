@@ -18,20 +18,20 @@ router.post('/tasks', auth, async (req, res) => {
   }
 })
 
-router.get('/tasks', async (req, res) => {
+router.get('/tasks', auth, async (req, res) => {
   try {
-    const tasks = await Task.find({})
-      res.send(tasks)
+    await req.user.populate('tasks').execPopulate() // This uses #55 in the User model
+      res.send(req.user.tasks)
   } catch(e) {
     res.status(500).send()
   }
 })
 
-router.get('/tasks/:id', async (req, res) => {
+router.get('/tasks/:id', auth, async (req, res) => {
   const _id = req.params.id
 
   try {
-    const task = await Task.findById(_id)
+    const task = await Task.findOne({ _id, owner: req.user._id }) // Here we're giving two filters for findOne to use 
       if (!task) {
         return res.statusMessage(404).send()
       }
@@ -42,7 +42,7 @@ router.get('/tasks/:id', async (req, res) => {
   }
 })
 
-router.patch('/tasks/:id', async (req, res) => {
+router.patch('/tasks/:id', auth, async (req, res) => {
   const updates = Object.keys(req.body)
   const allowedUpdates = ['completed', 'description']
   const isValidOperation = updates.every((update) => allowedUpdates.includes(update))
@@ -52,14 +52,14 @@ router.patch('/tasks/:id', async (req, res) => {
   }
   
   try {
-    const task = await Task.findById(req.params.id)
+    const task = await Task.findOne({_id: req.params.id, owner: req.user._id}) // A task will only be found if the task Id exists, or if you are the creator})
     
-    updates.forEach((update) => task[update] = req.body[update])
-    await task.save()
-
     if(!task) {
       res.status(404).send()
     }
+
+    updates.forEach((update) => task[update] = req.body[update])
+    await task.save()
 
     res.send(task)
   } catch (e) {
@@ -67,10 +67,10 @@ router.patch('/tasks/:id', async (req, res) => {
   }
 })
 
-router.delete('/tasks/:id', async (req, res) => {
+router.delete('/tasks/:id', auth, async (req, res) => {
   try {
-    const task = await Task.findByIdAndDelete(req.params.id)
-
+    const task = await Task.findOneAndDelete({_id: req.params._id, owner: req.user._id}) // _id comes from params and owner comes from the User model
+    
     if (!task) {
       return res.status(404).send()
     }
