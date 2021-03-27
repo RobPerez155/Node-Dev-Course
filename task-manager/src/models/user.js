@@ -51,6 +51,13 @@ const userSchema = new mongoose.Schema({ // Here is where create the properties 
   }]
 })
 
+// virtual property = is not actual data that's stored in a database, it's a relationship between 2 entities
+userSchema.virtual('tasks', {
+  ref: 'Task',
+  localField: '_id', // This is a relationship between "_id" and the Task owner field
+  foreignField: 'owner' // This is the name of the field on the other "thing", in this case Task
+})
+
 userSchema.methods.toJSON = function () { // toJSON is sending an object back sans the properties that we deleted off of it - this happens every time when we use res.send() JSON.stringify gets called on the user - where we manipulate the the properties we want to expose ANYTIME the User gets sent back to the client.
   const user = this
   const userObject = user.toObject()

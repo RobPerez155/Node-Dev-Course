@@ -1,9 +1,14 @@
 const express = require('express')
 const Task = require('../models/task')
+const auth = require('../middleware/auth')
 const router = new express.Router()
 
-router.post('/tasks', async (req, res) => {
-  const task = new Task(req.body)
+router.post('/tasks', auth, async (req, res) => {
+  // const task = new Task(req.body)
+  const task = new Task({ // This will create a task with all the task info and the owner attached to it
+    ...req.body, // ... will copy all of the properties from body over to our new task object
+    owner: req.user._id // This is coming from our auth file
+  })
   
   try{
     await task.save()

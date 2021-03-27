@@ -19,12 +19,17 @@ app.listen(port, () => {
   console.log(`Server is up on port ${port}`)
 })
 
-const pet = {
-  name: "hal"
+const Task = require('./models/task')
+const User = require('./models/user')
+
+const main = async () => {
+  // const task = await Task.findById('605f61155d55e20cf7f64d18')
+  // await task.populate('owner').execPopulate() // this allows you to "populate" data from a relationship
+  // console.log(task.owner)
+
+  const user = await User.findById('605f5cd5bdebb00ba4db21c3')
+  await user.populate('tasks').execPopulate()
+  console.log(user.tasks)
 }
 
-pet.toJSON = function () {
-  return {}
-}
-
-console.log(JSON.stringify(pet))
+main()
