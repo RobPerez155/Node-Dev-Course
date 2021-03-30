@@ -2,9 +2,7 @@ const express = require('express')
 const User = require('../models/user')
 const auth = require('../middleware/auth')
 const multer = require('multer')
-const upload = multer({
-  dest: 'avatar'
-})
+
 const router = new express.Router()
 
 router.post('/users', async (req, res) => { // /users is the endpoint - Public Route
@@ -88,8 +86,31 @@ router.delete('/users/me', auth, async (req, res) => {
   }
 })
 
-router.post('/users/me/avatar', upload.single('avatar'), (req, res) => {
+const upload = multer({
+  // dest: 'avatar', <-  We are removing this so we can pass the data directly through to our function instead of storing it on our file system
+  limits: {
+    fileSize: 1000000,
+  },
+  fileFilter(req, file, cb) {
+    if (!file.originalname.match(/\.(jpg|jpeg|png)$/)){
+      return cb(new Error('Please upload an image.'))
+    }
+
+    cb(undefined, true)
+  }
+})
+router.post('/users/me/avatar', auth, upload.single('avatar'), async (req, res) => {
+  req.user.avatar = req.file.buffer // Here we are storing our Buffer on the User Avatar field we set up in our model.
+  await req.user.save() // Here we are saving the update to avatar.
   res.send()
+}, (error, req, res, next) => {
+  res.status(400).send({ error: error.message })
+})
+
+router.delete('/users/me/avatar', auth, upload.single('avatar'), async (req, res) => {
+  req.user.avatar = undefined
+  await req.user.save()
+  res.status(200).send()
 })
 
 

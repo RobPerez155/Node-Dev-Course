@@ -49,7 +49,10 @@ const userSchema = new mongoose.Schema({ // Here is where create the properties 
       type: String,
       required: true
     }
-  }]
+  }],
+  avatar: {
+    type: Buffer // A Buffer is a class where we store raw data, Now we can store user photos in the user Model.
+  }
 }, {
   timestamps: true
 })
