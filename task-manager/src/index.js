@@ -7,6 +7,7 @@ const taskRouter = require('./routers/task')
 const app = express()
 const port = process.env.PORT || 3000 //part one is what we need to have in order to run our app on heroku and part two is how we have it run on our machine
 
+{// Multer Notes
 const multer = require('multer')
 const upload = multer({
   dest: 'images',
@@ -32,7 +33,7 @@ app.post('/upload', upload.single('upload'), (req, res) => { // upload.single is
   res.send() // This happens when things go well with our middleware
 }, (error, req, res, next) => { // This is for when we get an error, we need all 4 arguments in order to for Express to know this is our error handler
   res.status(400).send({ error: error.message })
-})
+})}
 
 app.use(express.json()) // Automatically parses incoming JSON to an object where we can access it using our req handlers
 app.use(userRouter)
