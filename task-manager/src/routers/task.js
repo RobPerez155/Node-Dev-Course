@@ -18,9 +18,19 @@ router.post('/tasks', auth, async (req, res) => {
   }
 })
 
+// GET /tasks?completed=true
 router.get('/tasks', auth, async (req, res) => {
+  const match = {}
+
+  if (req.query.completed) { // req.query.completed refers to the object we get in #21 - { completed: 'true' }
+    match.completed = req.query.completed === 'true' // We need to make req.query.completed equal to a string 'true', because our query returns a string and not a boolean 
+  }
+
   try {
-    await req.user.populate('tasks').execPopulate() // This uses #55 in the User model
+    await req.user.populate({
+      path: 'tasks',
+      match // Here we are using the property shorthand to call our object match from #23
+    }).execPopulate() // This uses #58 in the User model
       res.send(req.user.tasks)
   } catch(e) {
     res.status(500).send()

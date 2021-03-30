@@ -50,6 +50,8 @@ const userSchema = new mongoose.Schema({ // Here is where create the properties 
       required: true
     }
   }]
+}, {
+  timestamps: true
 })
 
 // virtual property = is not actual data that's stored in a database, it's a relationship between 2 entities
