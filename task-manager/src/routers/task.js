@@ -19,17 +19,30 @@ router.post('/tasks', auth, async (req, res) => {
 })
 
 // GET /tasks?completed=true
+// GET /task?limit=10&skip=20 -> limit - limits the number of results we get back, in this case 10 results and skip tells us the page number, in this case the third page - 0 = pg1, 10 = pg2, 20 = pg3 because we're skipping the first 20 results
+// GET /tasks?sortBy=createdAt:desc
 router.get('/tasks', auth, async (req, res) => {
   const match = {}
+  const sort = {}
 
   if (req.query.completed) { // req.query.completed refers to the object we get in #21 - { completed: 'true' }
     match.completed = req.query.completed === 'true' // We need to make req.query.completed equal to a string 'true', because our query returns a string and not a boolean 
   }
 
+  if (req.query.sortBy) {
+    const parts = req.query.sortBy.split(':') // #23 Here sortBy = createdAt:desc and .split will split this into an array of 2 strings at the colon -> :
+    sort[parts[0]] = parts[1] === 'desc' ? -1 : 1 //called ternary because we have 3 itmes, the condition ? true : false
+  }
+
   try {
     await req.user.populate({
       path: 'tasks',
-      match // Here we are using the property shorthand to call our object match from #23
+      match, // Here we are using the property shorthand to call our object match from #23
+      options: { // options can be used for both pagination and sorting
+        limit: parseInt(req.query.limit), // tells us how many items to be displayed
+        skip: parseInt(req.query.skip),    // tells how many results to skip
+        sort
+      }
     }).execPopulate() // This uses #58 in the User model
       res.send(req.user.tasks)
   } catch(e) {
