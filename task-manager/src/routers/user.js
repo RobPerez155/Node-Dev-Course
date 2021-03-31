@@ -1,7 +1,8 @@
 const express = require('express')
 const User = require('../models/user')
-const auth = require('../middleware/auth')
-const multer = require('multer')
+const auth = require('../middleware/auth') // For Authorization
+const multer = require('multer') // For Uploading files
+const sharp = require('sharp') // For resizing pictures
 
 const router = new express.Router()
 
@@ -100,7 +101,9 @@ const upload = multer({
   }
 })
 router.post('/users/me/avatar', auth, upload.single('avatar'), async (req, res) => {
-  req.user.avatar = req.file.buffer // Here we are storing our Buffer on the User Avatar field we set up in our model.
+  const buffer = await sharp(req.file.buffer).resize({ width: 250, height: 250 }).png().toBuffer()
+
+  req.user.avatar = buffer // Here we are storing our Buffer on the User Avatar field we set up in our model.
   await req.user.save() // Here we are saving the update to avatar.
   res.send()
 }, (error, req, res, next) => {
@@ -121,7 +124,7 @@ router.get('/users/:id/avatar', async (req, res) => {
       throw new Error()
     }
 
-    res.set('Content-Type', 'image/jpg')
+    res.set('Content-Type', 'image/png')
     res.send(user.avatar)
   } catch (e) {
     res.status(404).send()
