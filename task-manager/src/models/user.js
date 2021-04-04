@@ -78,7 +78,7 @@ userSchema.methods.toJSON = function () { // toJSON is sending an object back sa
 // '.methods' methods are available on the instances aka Instance Methods
 userSchema.methods.generateAuthToken = async function () {
   const user = this
-  const token = jwt.sign({ _id: user._id.toString()}, 'thisIsASecret') // jwt.sign({string}, string)
+  const token = jwt.sign({ _id: user._id.toString()}, process.env.JWT_SECRET) // jwt.sign({string}, string)
 
   user.tokens = user.tokens.concat({ token })
   await user.save()

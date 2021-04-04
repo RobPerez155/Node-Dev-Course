@@ -5,7 +5,7 @@ const userRouter = require('./routers/user')
 const taskRouter = require('./routers/task')
 
 const app = express()
-const port = process.env.PORT || 3000 //part one is what we need to have in order to run our app on heroku and part two is how we have it run on our machine
+const port = process.env.PORT //part one is what we need to have in order to run our app on heroku and part two is how we have it run on our machine
 
 {// Multer Notes
 const multer = require('multer')
