@@ -10,7 +10,9 @@
 .LSOverride
 
 # Icon must end with two \r
-Icon
+Icon
+
+
 
 # Thumbnails
 ._*
@@ -74,6 +76,7 @@ build/Release
 # Dependency directories
 node_modules/
 jspm_packages/
+
 
 # TypeScript v1 declaration files
 typings/
@@ -157,3 +160,4 @@ dist
 
 # Custom rules (everything added below won't be overriden by 'Generate .gitignore File' if you use 'Update' option)
 
+config
