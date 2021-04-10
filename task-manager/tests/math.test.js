@@ -44,7 +44,7 @@ test('should convert 0C to 32F', () => {
 //   }, 2000)
 // })
 
-// Both methods of using done() and async/await are valid, but async/await are most common
+// Both methods of using done() and async/await are valid, but async/await is the most common because it offers less nested callbacks and easier to read code.
 
 test('should add two numbers', (done) => {
   add(2, 3).then((sum) => { //here we call .then() allowing us to provide a function to run when the promise has been fulfilled by a value, in this case the sum 
