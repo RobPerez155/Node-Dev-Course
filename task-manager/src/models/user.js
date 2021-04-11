@@ -13,7 +13,7 @@ const userSchema = new mongoose.Schema({ // Here is where create the properties 
   },
   email: {
     type: String,
-    // unique: true,
+    unique: true,
     required: true,
     trim: true,
     lowercase: true,
