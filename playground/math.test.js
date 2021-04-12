@@ -1,5 +1,5 @@
 // const math = require('../src/math') // This imports the whole file
-const { calculateTip, fahrenheitToCelsius, celsiusToFahrenheit, add } = require('../src/math') // This destructures the file to pull in only the functions we need
+const { calculateTip, fahrenheitToCelsius, celsiusToFahrenheit, add } = require('../math') // This destructures the file to pull in only the functions we need
 
 // This is the basic way to write a test
 // test('should calculate total with tip', () => {
