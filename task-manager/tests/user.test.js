@@ -63,7 +63,7 @@ test('should not login nonexistent user', async () => {
       password: 'none'
   }).expect(400)
 })
-
+//
 test('should get profile for user', async () => {
   await request(app)
     .get('/users/me')
