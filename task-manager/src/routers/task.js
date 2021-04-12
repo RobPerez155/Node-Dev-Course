@@ -31,7 +31,7 @@ router.get('/tasks', auth, async (req, res) => {
 
   if (req.query.sortBy) {
     const parts = req.query.sortBy.split(':') // #23 Here sortBy = createdAt:desc and .split will split this into an array of 2 strings at the colon -> :
-    sort[parts[0]] = parts[1] === 'desc' ? -1 : 1 //called ternary because we have 3 itmes, the condition ? true : false
+    sort[parts[0]] = parts[1] === 'desc' ? -1 : 1 //called ternary because we have 3 items, the condition ? true : false
   }
 
   try {
