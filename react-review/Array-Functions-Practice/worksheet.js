@@ -31,9 +31,16 @@ const characters = [
 
 //***MAP***
 //1. Get array of all names
+const allNames = characters.map( (character) => character.name)
+
 //2. Get array of all heights
+const allHeights = characters.map ( (character) => character.height)
+
 //3. Get array of objects with just name and height properties
+const nameAndHeights = characters.map( (character) => [character.name, character.height])
+
 //4. Get array of all first names
+const firstNames = characters.map((character) => character.name.split(" ")[0])
 
 //***REDUCE***
 //1. Get total mass of all characters
@@ -43,9 +50,22 @@ const characters = [
 
 //***FILTER***
 //1. Get characters with mass greater than 100
+const greater100CharactersOld = characters.filter( (character) => {
+  return character.mass > 100
+})
+// This can be shortened because we have a 1 line return
+const greater100Characters = characters.filter( 
+  (character) => character.mass > 100 )
+
 //2. Get characters with height less than 200
+const shorter200Character = characters.filter( 
+  (character) => character.height < 200 )
+
 //3. Get all male characters
+const maleCharacter = characters.filter( (character) => character.gender == 'male')
+
 //4. Get all female characters
+const femaleCharacter = characters.filter( (character) => character.gender == 'female')
 
 //***SORT***
 //1. Sort by mass
