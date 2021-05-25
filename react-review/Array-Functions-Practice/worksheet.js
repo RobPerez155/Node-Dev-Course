@@ -43,11 +43,33 @@ const nameAndHeights = characters.map( (character) => [character.name, character
 const firstNames = characters.map((character) => character.name.split(" ")[0])
 
 //***REDUCE***
+    // Here we are trying to iterate through an array to get some kind of ending result
+    // We will use an acumulator pattern 
 //1. Get total mass of all characters
-//2. Get total height of all characters
-//3. Get total number of characters by eye color
-//4. Get total number of characters in all the character names
+const totMass = characters.reduce((accumulator, current) => {
+  return accumulator + current.mass
+}, 0)
 
+//2. Get total height of all characters
+const totHeight = characters.reduce((acc, cur) => acc + cur.height, 0)
+
+//3. Get total number of characters by eye color
+    // This is an example of exactly why one should ask deeper questions on whiteboarding challenges
+      // How do you want the data returned
+      // So you want to see there are x amount of blue eyes, y amount of yellow eyes...
+const totByEyeColor = characters.reduce((acc, cur) => {
+  const eyeColor = cur.eye_color
+  if(acc[eyeColor]) { // if the accumulator already has a key of eyeColor, then we update the value for that eye_color
+    acc[eyeColor]++
+  } else { // else, if there is no key then add it and assign it the value of one
+    acc[eyeColor] = 1
+  }
+  return acc
+}, {}) // Here we start the count with an empty object
+console.log(totByEyeColor)
+//4. Get total number of characters in all the character names
+const totChar = characters.reduce((acc, cur) => acc + cur.name.length, 0) 
+console.log(totChar)
 //***FILTER***
 //1. Get characters with mass greater than 100
 const greater100CharactersOld = characters.filter( (character) => {
@@ -85,7 +107,7 @@ const sortDescName = characters.sort( (a, b) => {
 })
 
 //4. Sort by gender
-const byGender = characters.sort((a, b) => {
+const byGender = characters.sort((a) => {
   if(a.gender === 'female') return -1
   return 1
 })
