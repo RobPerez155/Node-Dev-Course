@@ -138,3 +138,24 @@ const taller210 = characters.some((character) => character.height > 210)
 
 //4. Is there at least one character that has mass less than 50?
 const less50 = characters.some((character) => character.mass < 50)
+
+// Traditional for loop
+for (let i = 0; i < arr.length; i++) {
+  // (Start here; Stop here; do after each)
+}
+
+// for of loop 
+for (const e of arr) {
+  // (Iterate each item e for the entire arr)
+}
+
+// forEach loop
+arr.forEach(element => {
+  // code we want to run for each element
+  console.log(element)
+});
+
+// How to loop over an object, use .map or for in loop
+for ( const key in object) {
+  // This will iterate over each key in the object
+}
